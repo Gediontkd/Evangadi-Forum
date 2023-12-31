@@ -65,6 +65,7 @@ async function login(req, res){
 }
 
 async function checkUser(req, res){
-    res.send('check user')
+    const {username, userid} = req.user
+    res.status(StatusCodes.OK).json({msg: "valid user", username, userid})
 }
 module.exports = {register, login, checkUser}
