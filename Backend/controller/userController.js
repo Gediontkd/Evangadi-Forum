@@ -2,6 +2,7 @@
 const dbconnection = require("../DB-folder/dbconfig")
 const bcrypt = require("bcrypt")
 const { StatusCodes } = require("http-status-codes");
+const jwt = require("jsonwebtoken");
 
 async function register(req, res){
     const{username, firstname, lastname, email, password} = req.body;
@@ -43,6 +44,18 @@ async function login(req, res){
    if (user.length == 0){
     return res.status(StatusCodes.BAD_REQUEST).json({msg:"invalid credential!"});
    }
+        //   Compare Password
+        const isMatch = await bcrypt.compare(password, user[0].password);
+        if(!isMatch){
+            return res.status(StatusCodes.UNAUTHORIZED).json({msg:'Invalid Credentials'});
+        }
+        const username = user[0].username
+        const userid = user[0].userid
+       const token = jwt.sign({username, userid}, "secret", {expiresIn: "1d"})
+
+       return res.status(StatusCodes.OK).json({msg: "User Login Successfully!", token})
+         
+
     } catch (error) {
         console.log(error.message)
        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg: "Something went wrong, try again later!"})
