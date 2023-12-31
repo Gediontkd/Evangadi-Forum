@@ -1,6 +1,6 @@
 // db connection
 const dbconnection = require("../DB-folder/dbconfig")
-
+const bcrypt = require("bcrypt")
 
 async function register(req, res){
     const{username, firstname, lastname, email, password} = req.body;
@@ -19,8 +19,11 @@ try {
    if (password.length < 8){
    return res.status(400).json({msg:"password must be at least 8 characters!"});
    }
+//    incrypt the password
+     const salt = await bcrypt.genSalt(10);
+     var hashedPassword= await bcrypt.hash(password, salt);
 
-    await dbconnection.query("INSERT INTO users (username, firstname, lastname, email, password) values (?,?,?,?,?)", [username, firstname, lastname, email, password])
+    await dbconnection.query("INSERT INTO users (username, firstname, lastname, email, password) values (?,?,?,?,?)", [username, firstname, lastname, email, hashedPassword])
     return res.status(201).json({ msg: "user registered!"});
 } catch (error) {
     console.log(error.message)
