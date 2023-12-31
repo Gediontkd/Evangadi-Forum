@@ -6,6 +6,12 @@ const port = process.env.DB_PORT;
 // import the router
 const userRouter = require('./routes/userRoute.js');
 
+// json middleware to extract json data
+// app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
 // users route middleware
 app.use("/api/users",userRouter);
 // db connection
