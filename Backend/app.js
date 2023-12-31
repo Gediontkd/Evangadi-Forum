@@ -4,9 +4,15 @@ const port = 5500
 // import the router
 const userRouter = require('./routes/userRoute.js');
 
+// users route middleware
 app.use("/api/users",userRouter);
 // const dbconnection = require("./db/dbConfig.js")
 
+
+
+// question router middleware ??
+
+// answer route middleware ??
 
 
 
